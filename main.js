@@ -34,5 +34,7 @@ function autoScroll(obj, options) {
         for (let elm of $(obj).children()) {
             observer.observe(elm);
         }
+    } else {
+        console.warn('Scroll wont be infinite duo to browser support');
     }
 }
