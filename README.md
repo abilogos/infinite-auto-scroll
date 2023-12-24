@@ -1,3 +1,11 @@
+## install
+
+install using npm ,yarn,pnpm etc
+
+```
+npm install infinite-auto-scroller
+```
+
 ## how to use
 
 invoke the function to an jquery element:
