@@ -1,15 +1,11 @@
-$(document).ready(function(){
-    $(".auto-scroll-container").each(function () {
-        autoScroll(this, {scroll_dir:'left', gear:4, flex_flow: 'row', stop: false});
-    });
-});
+jQuery.fn.autoScroll = function (options) {
+    let jqueryObj = this;
 
-function autoScroll(obj, options) {
-    $(obj).css("overflow","auto");
-    $(obj).css("display", "flex");
+    jqueryObj.css("overflow","auto");
+    jqueryObj.css("display", "flex");
     
     let flex_flow = options.flex_flow == 'column' ? 'column' : 'row';
-    $(obj).css("flex-flow", flex_flow);
+    jqueryObj.css("flex-flow", flex_flow);
 
     // speed gears (21 is the speed of light :) )
     const speedGears = [
@@ -40,16 +36,16 @@ function autoScroll(obj, options) {
 
     setInterval(function () {
         if (flex_flow == 'row'){
-            $(obj).scrollLeft($(obj).scrollLeft() + (scrollDirMul* curSpeedParams[1]) );
+            jqueryObj.scrollLeft(jqueryObj.scrollLeft() + (scrollDirMul* curSpeedParams[1]) );
         } else {
-            $(obj).scrollTop($(obj).scrollTop() + (scrollDirMul* curSpeedParams[1]) );
+            jqueryObj.scrollTop(jqueryObj.scrollTop() + (scrollDirMul* curSpeedParams[1]) );
         }
     }, curSpeedParams[0]);
 
     if (!stop) {
         if (window.IntersectionObserver === undefined) {
             console.warn('Scroll wont be infinite duo to browser support');
-            return;
+            return jqueryObj;
         }
         var observer = new IntersectionObserver(
             function (elements) {
@@ -57,28 +53,29 @@ function autoScroll(obj, options) {
                 if (element.isIntersecting === false) {
 
                     if (scrollDirMul == 1) {
-                        $(obj).append($(element.target));
+                        jqueryObj.append($(element.target));
                     } else {
-                        $(obj).prepend($(element.target));
+                        jqueryObj.prepend($(element.target));
                     }
 
                     if (flex_flow == 'row'){
                         let width = element.boundingClientRect.width;
-                        $(obj).scrollLeft($(obj).scrollLeft() + (-1*scrollDirMul* width ) );
+                        jqueryObj.scrollLeft(jqueryObj.scrollLeft() + (-1*scrollDirMul* width ) );
                     } else {
                         let height = element.boundingClientRect.height;
-                        $(obj).scrollTop($(obj).scrollTop() + (-1*scrollDirMul* height ) );
+                        jqueryObj.scrollTop(jqueryObj.scrollTop() + (-1*scrollDirMul* height ) );
                     }
                 }
             },
             {
-                root: obj,
+                root: jqueryObj[0],//obj
                 rootMargin: "0px",
                 threshold: 0,
             }
         );
-        for (let elm of $(obj).children()) {
+        for (let elm of jqueryObj.children()) {
             observer.observe(elm);
         }
     }
+    return jqueryObj;
 }
