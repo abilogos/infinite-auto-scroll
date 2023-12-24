@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $(".auto-scroll-container").each(function () {
-        autoScroll(this, {scroll_dir:'right', gear:4, flex_flow: 'row', stop: false});
+        autoScroll(this, {scroll_dir:'left', gear:4, flex_flow: 'row', stop: false});
     });
 });
 
@@ -55,9 +55,20 @@ function autoScroll(obj, options) {
             function (elements) {
                 let element = elements[0];
                 if (element.isIntersecting === false) {
-                    $(obj).append($(element.target));
-                    let width = element.boundingClientRect.width;
-                    $(obj).scrollLeft($(obj).scrollLeft() + (-1*scrollDirMul* width ) );
+
+                    if (scrollDirMul == 1) {
+                        $(obj).append($(element.target));
+                    } else {
+                        $(obj).prepend($(element.target));
+                    }
+
+                    if (flex_flow == 'row'){
+                        let width = element.boundingClientRect.width;
+                        $(obj).scrollLeft($(obj).scrollLeft() + (-1*scrollDirMul* width ) );
+                    } else {
+                        let height = element.boundingClientRect.height;
+                        $(obj).scrollTop($(obj).scrollTop() + (-1*scrollDirMul* height ) );
+                    }
                 }
             },
             {
@@ -69,5 +80,5 @@ function autoScroll(obj, options) {
         for (let elm of $(obj).children()) {
             observer.observe(elm);
         }
-}
+    }
 }
