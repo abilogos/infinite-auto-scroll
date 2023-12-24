@@ -1,13 +1,15 @@
 $(document).ready(function(){
 $(".auto-scroll-container").each(function () {
-    autoScroll(this, {dir:'right', gear:2});
+    autoScroll(this, {scroll_dir:'right', gear:4, flex_flow: 'row'});
 });
 });
 
 function autoScroll(obj, options) {
     $(obj).css("overflow","auto");
-    $(obj).css("flex-wrap", "nowrap");
     $(obj).css("display", "flex");
+    
+    let flex_flow = options.flex_flow == 'column' ? 'column' : 'row';
+    $(obj).css("flex-flow", flex_flow);
 
     // speed gears (21 is the speed of light :) )
     const speedGears = [
@@ -27,10 +29,19 @@ function autoScroll(obj, options) {
     let gear = Number.isInteger(options.gear) && options.gear >=0 && options.gear < 8 ? options.gear : 4;
     let curSpeedParams = speedGears[gear];
 
-    let scrollDirMul = options.dir == 'left' ? -1 : 1;//defult to right
+    let scrollDirMul;
+    if (flex_flow == 'row'){
+        scrollDirMul = options.scroll_dir == 'left' ? -1 : 1;//default to right
+    } else {
+        scrollDirMul = options.scroll_dir == 'up' ? -1 : 1;//default to down
+    }
 
     setInterval(function () {
-        $(obj).scrollLeft($(obj).scrollLeft() + (scrollDirMul* curSpeedParams[1]) );
+        if (flex_flow == 'row'){
+            $(obj).scrollLeft($(obj).scrollLeft() + (scrollDirMul* curSpeedParams[1]) );
+        } else {
+            $(obj).scrollTop($(obj).scrollTop() + (scrollDirMul* curSpeedParams[1]) );
+        }
     }, curSpeedParams[0]);
 
     if (window.IntersectionObserver !== undefined) {
