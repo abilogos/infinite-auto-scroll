@@ -1,7 +1,7 @@
 $(document).ready(function(){
-$(".auto-scroll-container").each(function () {
-    autoScroll(this, {scroll_dir:'right', gear:4, flex_flow: 'row'});
-});
+    $(".auto-scroll-container").each(function () {
+        autoScroll(this, {scroll_dir:'right', gear:4, flex_flow: 'row', stop: false});
+    });
 });
 
 function autoScroll(obj, options) {
@@ -36,6 +36,8 @@ function autoScroll(obj, options) {
         scrollDirMul = options.scroll_dir == 'up' ? -1 : 1;//default to down
     }
 
+    let stop = options.stop==true ? true : false;
+
     setInterval(function () {
         if (flex_flow == 'row'){
             $(obj).scrollLeft($(obj).scrollLeft() + (scrollDirMul* curSpeedParams[1]) );
@@ -44,7 +46,11 @@ function autoScroll(obj, options) {
         }
     }, curSpeedParams[0]);
 
-    if (window.IntersectionObserver !== undefined) {
+    if (!stop) {
+        if (window.IntersectionObserver === undefined) {
+            console.warn('Scroll wont be infinite duo to browser support');
+            return;
+        }
         var observer = new IntersectionObserver(
             function (elements) {
                 let element = elements[0];
@@ -63,7 +69,5 @@ function autoScroll(obj, options) {
         for (let elm of $(obj).children()) {
             observer.observe(elm);
         }
-    } else {
-        console.warn('Scroll wont be infinite duo to browser support');
-    }
+}
 }
