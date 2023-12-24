@@ -1,4 +1,4 @@
-jQuery.fn.autoScroll = function (options) {
+jQuery.fn.autoScroll = function (options = {}) {
     let jqueryObj = this;
 
     jqueryObj.css("overflow","auto");
