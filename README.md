@@ -1,3 +1,9 @@
+## intro
+
+a simple auto-scroller using IntersectionObserver api
+
+demo <img src="./infinite-scroller.gif" width="640px"></img>
+
 ## install
 
 install using npm ,yarn,pnpm etc
